@@ -5,95 +5,93 @@ export class Shape {
         this.renderz = new Renderz();
         this.renderz.init();
         this.positions = [];
+        this.colors = [];
     }
 
-    initLeftTriangle(minX, minY, maxX, maxY) {
-        if(!this.checkValidity(minX, minY, maxX, maxY)){
-            return;
-        }
+    initTriangle(x1, y1, x2, y2, x3, y3, r, g, b) {
 
-        this.positions.push(minX);
-        this.positions.push(minY);
-        this.positions.push(maxX);
-        this.positions.push(minY);
-        this.positions.push(minX);
-        this.positions.push(maxY);
+        this.positions.push(x1);
+        this.positions.push(y1);
+        this.colors.push(r/255);
+        this.colors.push(g/255);
+        this.colors.push(b/255);
+        this.colors.push(1.0);
+        this.positions.push(x2);
+        this.positions.push(y2);
+        this.colors.push(r/255);
+        this.colors.push(g/255);
+        this.colors.push(b/255);
+        this.colors.push(1.0);
+        this.positions.push(x3);
+        this.positions.push(y3);
+        this.colors.push(r/255);
+        this.colors.push(g/255);
+        this.colors.push(b/255);
+        this.colors.push(1.0);
     }
 
-    initRightTriangle(minX, minY, maxX, maxY) {
-        if(!this.checkValidity(minX, minY, maxX, maxY)){
-            return;
-        }
-
-        this.positions.push(minX);
-        this.positions.push(minY);
-        this.positions.push(maxX);
-        this.positions.push(minY);
-        this.positions.push(maxX);
-        this.positions.push(maxY);
-    }
-    
-    initEqTriangle(minX,minY,maxX,maxY){
-        if(!this.checkValidity(minX, minY, maxX, maxY)){
-            return;
-        }
-        
-        this.positions.push(minX);
-        this.positions.push(minY);
-        this.positions.push(maxX);
-        this.positions.push(minY);
-        this.positions.push((maxX+minX)/2);
-        this.positions.push(maxY);
-    }
-
-    initQuad(minX,minY,maxX,maxY){
-        if(!this.checkValidity(minX, minY, maxX, maxY)){
-            return;
-        }
-        
-        this.positions.push(minX);
-        this.positions.push(minY);
-        this.positions.push(maxX);
-        this.positions.push(minY);
-        this.positions.push(maxX);
-        this.positions.push(maxY);
-        this.positions.push(minX);
-        this.positions.push(minY);
-        this.positions.push(maxX);
-        this.positions.push(maxY);
-        this.positions.push(minX);
-        this.positions.push(maxY);
+    initQuad(x1, y1, x2, y2, x3, y3,x4,y4, r, g, b){
+      
+        this.positions.push(x1);
+        this.positions.push(y1);
+        this.colors.push(r/255);
+        this.colors.push(g/255);
+        this.colors.push(b/255);
+        this.colors.push(1.0);
+        this.positions.push(x2);
+        this.positions.push(y2);
+        this.colors.push(r/255);
+        this.colors.push(g/255);
+        this.colors.push(b/255);
+        this.colors.push(1.0);
+        this.positions.push(x3);
+        this.positions.push(y3);
+        this.colors.push(r/255);
+        this.colors.push(g/255);
+        this.colors.push(b/255);
+        this.colors.push(1.0);
+        this.positions.push(x3);
+        this.positions.push(y3);
+        this.colors.push(r/255);
+        this.colors.push(g/255);
+        this.colors.push(b/255);
+        this.colors.push(1.0);
+        this.positions.push(x4);
+        this.positions.push(y4);
+        this.colors.push(r/255);
+        this.colors.push(g/255);
+        this.colors.push(b/255);
+        this.colors.push(1.0);
+        this.positions.push(x2);
+        this.positions.push(y2);
+        this.colors.push(r/255);
+        this.colors.push(g/255);
+        this.colors.push(b/255);
+        this.colors.push(1.0);
     }
 
-    checkValidity(minX, minY, maxX, maxY){
-        if((minX>maxX)||(minY>maxY)){
-            alert("Minimum value can not be greater than the Maximum value");
-            return false;
-        }
-        return true;
-    }
-    renderShapes() {
-        //number of positional pairs given
-        var count = this.positions.length / 2;
-       
-        // give buffer the positions
-        this.renderz.gl.bufferData(this.renderz.gl.ARRAY_BUFFER, new Float32Array(this.positions), this.renderz.gl.STATIC_DRAW);
 
-        // create vertex array object and bind it to be the current one
-        let vao = this.renderz.gl.createVertexArray();
-
-        this.renderz.gl.bindVertexArray(vao);
-
+    arrayToBuffer(array, attributeLocation, size) {
+        let buffer = this.renderz.gl.createBuffer();
+        // bind buffer for vertex positions
+        this.renderz.gl.bindBuffer(this.renderz.gl.ARRAY_BUFFER, buffer);
+        this.renderz.gl.bufferData(this.renderz.gl.ARRAY_BUFFER, new Float32Array(array), this.renderz.gl.STATIC_DRAW);
         // generic vertex array to list of attribute arrays
-        this.renderz.gl.enableVertexAttribArray(this.renderz.positionAttributeLocation);
-
-        let size = 2; // 2d coordinates
+        this.renderz.gl.enableVertexAttribArray(attributeLocation);
+        //number of positional given
         let type = this.renderz.gl.FLOAT;
         let normalize = false;
         let stride = 0;
         let offset = 0;
+        this.renderz.gl.vertexAttribPointer(attributeLocation, size, type, normalize, stride, offset);
+    }
 
-        this.renderz.gl.vertexAttribPointer(this.renderz.positionAttributeLocation, size, type, normalize, stride, offset);
+    renderShapes() {
+
+        const posSize = 2; //coordinates
+        const colSize = 4; //color coordinate RGBA
+        this.arrayToBuffer(this.positions, this.renderz.positionAttributeLocation, posSize);
+        this.arrayToBuffer(this.colors, this.renderz.colorAttributeLocation, colSize);
 
         this.renderz.gl.viewport(0, 0, this.renderz.gl.canvas.width, this.renderz.gl.canvas.height);
 
@@ -102,12 +100,11 @@ export class Shape {
 
         // using the program
         this.renderz.gl.useProgram(this.renderz.program);
-
-        this.renderz.gl.bindVertexArray(vao);
-
         this.renderz.gl.uniform2f(this.renderz.resolutionUniformLocation, this.renderz.gl.canvas.width, this.renderz.gl.canvas.height);
-        this.renderz.gl.uniform4f(this.renderz.colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
 
+        //number of vertices in the position buffer
+        var count = this.positions.length / posSize;
+        let offset = 0;
         // draw the triangles
         let primitiveType = this.renderz.gl.TRIANGLES;
         this.renderz.gl.drawArrays(primitiveType, offset, count);

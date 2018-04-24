@@ -6,13 +6,14 @@ export class Renderz{
     var shader = new Shader();
     let utils = new Utils();
 
-    let canvas = document.getElementById("canvas");
+    this.canvas = document.getElementById("canvas");
     this.gl = canvas.getContext("webgl2");
-    
+    canvas.height = canvas.clientHeight;
+    canvas.width = canvas.clientWidth;
     if (!this.gl) {
       alert("Webgl2 not initialized"); // eslint-disable-line
     }
-  
+    
     let vertexShaderSrc = shader.GetVertexShader();
     let fragmentShaderSrc = shader.GetFragmentShader();
     // create shaders
@@ -24,14 +25,11 @@ export class Renderz{
   
     // get attribute location
     this.positionAttributeLocation = this.gl.getAttribLocation(this.program, "a_pos");
-  
+    this.colorAttributeLocation = this.gl.getAttribLocation(this.program, "a_color");
     this.resolutionUniformLocation = this.gl.getUniformLocation(this.program, "u_resolution");
 
-    this.colorUniformLocation = this.gl.getUniformLocation(this.program,"u_color");
-  
-    let positionBuffer = this.gl.createBuffer();
-  
-    // bind buffer for vertex positions
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, positionBuffer);
+       // create vertex array object and bind it to be the current one
+    let vao = this.gl.createVertexArray();
+    this.gl.bindVertexArray(vao);
   }
 }
