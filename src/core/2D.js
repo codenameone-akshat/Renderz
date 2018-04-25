@@ -12,61 +12,61 @@ export class Shape {
 
         this.positions.push(x1);
         this.positions.push(y1);
-        this.colors.push(r/255);
-        this.colors.push(g/255);
-        this.colors.push(b/255);
+        this.colors.push(r / 255);
+        this.colors.push(g / 255);
+        this.colors.push(b / 255);
         this.colors.push(1.0);
         this.positions.push(x2);
         this.positions.push(y2);
-        this.colors.push(r/255);
-        this.colors.push(g/255);
-        this.colors.push(b/255);
+        this.colors.push(r / 255);
+        this.colors.push(g / 255);
+        this.colors.push(b / 255);
         this.colors.push(1.0);
         this.positions.push(x3);
         this.positions.push(y3);
-        this.colors.push(r/255);
-        this.colors.push(g/255);
-        this.colors.push(b/255);
+        this.colors.push(r / 255);
+        this.colors.push(g / 255);
+        this.colors.push(b / 255);
         this.colors.push(1.0);
     }
 
-    initQuad(x1, y1, x2, y2, x3, y3,x4,y4, r, g, b){
-      
+    initQuad(x1, y1, x2, y2, x3, y3, x4, y4, r, g, b) {
+
         this.positions.push(x1);
         this.positions.push(y1);
-        this.colors.push(r/255);
-        this.colors.push(g/255);
-        this.colors.push(b/255);
+        this.colors.push(r / 255);
+        this.colors.push(g / 255);
+        this.colors.push(b / 255);
         this.colors.push(1.0);
         this.positions.push(x2);
         this.positions.push(y2);
-        this.colors.push(r/255);
-        this.colors.push(g/255);
-        this.colors.push(b/255);
+        this.colors.push(r / 255);
+        this.colors.push(g / 255);
+        this.colors.push(b / 255);
         this.colors.push(1.0);
         this.positions.push(x3);
         this.positions.push(y3);
-        this.colors.push(r/255);
-        this.colors.push(g/255);
-        this.colors.push(b/255);
+        this.colors.push(r / 255);
+        this.colors.push(g / 255);
+        this.colors.push(b / 255);
         this.colors.push(1.0);
         this.positions.push(x3);
         this.positions.push(y3);
-        this.colors.push(r/255);
-        this.colors.push(g/255);
-        this.colors.push(b/255);
+        this.colors.push(r / 255);
+        this.colors.push(g / 255);
+        this.colors.push(b / 255);
         this.colors.push(1.0);
         this.positions.push(x4);
         this.positions.push(y4);
-        this.colors.push(r/255);
-        this.colors.push(g/255);
-        this.colors.push(b/255);
+        this.colors.push(r / 255);
+        this.colors.push(g / 255);
+        this.colors.push(b / 255);
         this.colors.push(1.0);
         this.positions.push(x2);
         this.positions.push(y2);
-        this.colors.push(r/255);
-        this.colors.push(g/255);
-        this.colors.push(b/255);
+        this.colors.push(r / 255);
+        this.colors.push(g / 255);
+        this.colors.push(b / 255);
         this.colors.push(1.0);
     }
 

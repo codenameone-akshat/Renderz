@@ -8,8 +8,8 @@ export class Renderz{
 
     this.canvas = document.getElementById("canvas");
     this.gl = canvas.getContext("webgl2");
-    canvas.height = canvas.clientHeight;
-    canvas.width = canvas.clientWidth;
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
     if (!this.gl) {
       alert("Webgl2 not initialized"); // eslint-disable-line
     }

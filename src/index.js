@@ -8,8 +8,19 @@ function exec(){
     let shape = new Shape();
     
     renderer.init();
-    shape.initTriangle(10,70,70,110,50,50,0,211,150);
-    //shape.initQuad(10,70,70,110,50,50,10,10,200,211,150);
+    shape.initTriangle(80,70,
+                       150,70,
+                       150,10,
+                       0,
+                       211,
+                       150);
+    shape.initQuad(10,10,
+                   10,70,
+                   70,10,
+                   70,70,
+                   200,
+                   211,
+                   150);
     shape.renderShapes();
 }
 
