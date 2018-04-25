@@ -12,75 +12,81 @@ export class Shape {
 
         this.positions.push(x1);
         this.positions.push(y1);
-        this.colors.push(r / 255);
-        this.colors.push(g / 255);
-        this.colors.push(b / 255);
-        this.colors.push(1.0);
+        this.colors.push(r);
+        this.colors.push(g);
+        this.colors.push(b);
+        this.colors.push(255);
         this.positions.push(x2);
         this.positions.push(y2);
-        this.colors.push(r / 255);
-        this.colors.push(g / 255);
-        this.colors.push(b / 255);
-        this.colors.push(1.0);
+        this.colors.push(r);
+        this.colors.push(g);
+        this.colors.push(b);
+        this.colors.push(255);
         this.positions.push(x3);
         this.positions.push(y3);
-        this.colors.push(r / 255);
-        this.colors.push(g / 255);
-        this.colors.push(b / 255);
-        this.colors.push(1.0);
+        this.colors.push(r);
+        this.colors.push(g);
+        this.colors.push(b);
+        this.colors.push(255);
     }
 
     initQuad(x1, y1, x2, y2, x3, y3, x4, y4, r, g, b) {
 
         this.positions.push(x1);
         this.positions.push(y1);
-        this.colors.push(r / 255);
-        this.colors.push(g / 255);
-        this.colors.push(b / 255);
-        this.colors.push(1.0);
+        this.colors.push(r);
+        this.colors.push(g);
+        this.colors.push(b);
+        this.colors.push(255);
         this.positions.push(x2);
         this.positions.push(y2);
-        this.colors.push(r / 255);
-        this.colors.push(g / 255);
-        this.colors.push(b / 255);
-        this.colors.push(1.0);
+        this.colors.push(r);
+        this.colors.push(g);
+        this.colors.push(b);
+        this.colors.push(255);
         this.positions.push(x3);
         this.positions.push(y3);
-        this.colors.push(r / 255);
-        this.colors.push(g / 255);
-        this.colors.push(b / 255);
-        this.colors.push(1.0);
+        this.colors.push(r);
+        this.colors.push(g);
+        this.colors.push(b);
+        this.colors.push(255);
         this.positions.push(x3);
         this.positions.push(y3);
-        this.colors.push(r / 255);
-        this.colors.push(g / 255);
-        this.colors.push(b / 255);
-        this.colors.push(1.0);
+        this.colors.push(r);
+        this.colors.push(g);
+        this.colors.push(b);
+        this.colors.push(255);
         this.positions.push(x4);
         this.positions.push(y4);
-        this.colors.push(r / 255);
-        this.colors.push(g / 255);
-        this.colors.push(b / 255);
-        this.colors.push(1.0);
+        this.colors.push(r);
+        this.colors.push(g);
+        this.colors.push(b);
+        this.colors.push(255);
         this.positions.push(x2);
         this.positions.push(y2);
-        this.colors.push(r / 255);
-        this.colors.push(g / 255);
-        this.colors.push(b / 255);
-        this.colors.push(1.0);
+        this.colors.push(r);
+        this.colors.push(g);
+        this.colors.push(b);
+        this.colors.push(255);
     }
 
 
-    arrayToBuffer(array, attributeLocation, size) {
+    arrayToBuffer(array, attributeLocation, dataType, shouldNormalize, size) {
         let buffer = this.renderz.gl.createBuffer();
         // bind buffer for vertex positions
         this.renderz.gl.bindBuffer(this.renderz.gl.ARRAY_BUFFER, buffer);
-        this.renderz.gl.bufferData(this.renderz.gl.ARRAY_BUFFER, new Float32Array(array), this.renderz.gl.STATIC_DRAW);
+
+        //for different types of arrays
+        if (dataType == this.renderz.gl.FLOAT)
+            this.renderz.gl.bufferData(this.renderz.gl.ARRAY_BUFFER, new Float32Array(array), this.renderz.gl.STATIC_DRAW);
+        else if (dataType == this.renderz.gl.UNSIGNED_BYTE)
+            this.renderz.gl.bufferData(this.renderz.gl.ARRAY_BUFFER, new Uint8Array(array), this.renderz.gl.STATIC_DRAW);
+
         // generic vertex array to list of attribute arrays
         this.renderz.gl.enableVertexAttribArray(attributeLocation);
         //number of positional given
-        let type = this.renderz.gl.FLOAT;
-        let normalize = false;
+        let type = dataType;
+        let normalize = shouldNormalize;
         let stride = 0;
         let offset = 0;
         this.renderz.gl.vertexAttribPointer(attributeLocation, size, type, normalize, stride, offset);
@@ -90,8 +96,8 @@ export class Shape {
 
         const posSize = 2; //coordinates
         const colSize = 4; //color coordinate RGBA
-        this.arrayToBuffer(this.positions, this.renderz.positionAttributeLocation, posSize);
-        this.arrayToBuffer(this.colors, this.renderz.colorAttributeLocation, colSize);
+        this.arrayToBuffer(this.positions, this.renderz.positionAttributeLocation, this.renderz.gl.FLOAT, false, posSize);
+        this.arrayToBuffer(this.colors, this.renderz.colorAttributeLocation, this.renderz.gl.UNSIGNED_BYTE, true, colSize);
 
         this.renderz.gl.viewport(0, 0, this.renderz.gl.canvas.width, this.renderz.gl.canvas.height);
 
