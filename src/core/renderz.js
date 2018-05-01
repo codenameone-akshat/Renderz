@@ -69,7 +69,7 @@ export class Renderz {
     this.gl.vertexAttribPointer(attributeLocation, size, type, normalize, stride, offset);
   }
 
-  renderShapes(geometryManager, shaderType) {
+  renderScene(geometryManager, shaderType) {
     const posSize = 2; //coordinates
     const colSize = 4; //color coordinate RGBA
     const texSize = 2;
@@ -95,7 +95,6 @@ export class Renderz {
       this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
 
       // Set the parameters so we don't need mips and so we're not filtering
-      // and we don't repeat
       this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
       this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
       this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
@@ -116,8 +115,13 @@ export class Renderz {
 
     // using the program
     this.gl.useProgram(this.program);
+    
     this.gl.uniform2f(this.resolutionUniformLocation, this.gl.canvas.width, this.gl.canvas.height);
 
+    if (shaderType == "texture") {
+      gl.uniform1i(imageLocation, 0);
+    }
+    
     //number of vertices in the position buffer
     var count = geometryManager.positions.length / posSize;
     let offset = 0;

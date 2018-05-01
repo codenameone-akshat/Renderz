@@ -39,7 +39,7 @@ export class RenderSpace {
             }
         }
         else if (this.shaderType == "color") {
-            this.renderer.renderShapes(this.geometryMgr, this.shaderType);
+            this.renderer.renderScene(this.geometryMgr, this.shaderType);
         }
     }
 }
