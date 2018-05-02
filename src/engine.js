@@ -21,22 +21,9 @@ export class Engine {
         this.renderer.init(this.shaderType, this.shader);
 
         window.requestAnimationFrame(this.step.bind(this));
-        //this.renderer.renderScene();
     }
 
     async preload() {
-        /*let response = await fetch("https://i.imgur.com/mw5Uh2F.jpg");
-        //let response = await fetch("./data/road.png");
-        let blob = await response.blob();
-        let imageData = await createImageBitmap(blob);
-   
-       
-       let canvas = document.getElementById("canvas");
-       canvas.width = imageData.width;
-       canvas.height = imageData.height;
-       const ctx = canvas.getContext("2d");
-       ctx.drawImage(imageData, 0, 0);
-       */
         for (let i = 0; i < this.world.sprites.length; ++i) {
             const sprite = this.world.sprites[i];
             console.log("fetching sprite.key, " + sprite.key);
@@ -44,10 +31,9 @@ export class Engine {
             let blob = await response.blob();
             sprite.imageData = await createImageBitmap(blob);
         }
-
     }
 
-    update(){
+    update() {
         for (let i = 0; i < this.world.sprites.length; ++i) {
             const sprite = this.world.sprites[i];
             sprite.update();
@@ -63,4 +49,16 @@ export class Engine {
 }
 
 export var engine = new Engine();
-//exports.engine = engine;
+
+
+/*
+    let response = await fetch("https://i.imgur.com/mw5Uh2F.jpg");
+    //let response = await fetch("./data/road.png");
+    let blob = await response.blob();
+    let imageData = await createImageBitmap(blob);
+    let canvas = document.getElementById("canvas");
+    canvas.width = imageData.width;
+    canvas.height = imageData.height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(imageData, 0, 0);
+ */

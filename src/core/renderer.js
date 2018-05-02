@@ -13,8 +13,8 @@ export class Renderer {
 
     this.canvas = document.getElementById("canvas");
     this.gl = this.canvas.getContext("webgl2");
-    this.canvas.height = window.innerHeight - (window.innerHeight * 0.05);
-    this.canvas.width = window.innerWidth - (window.innerWidth * 0.05);
+    this.canvas.height = window.innerHeight;// - (window.innerHeight * 0.05);
+    this.canvas.width = window.innerWidth;// - (window.innerWidth * 0.05);
     this.fragmentShaderType = fillType;
     this.image = undefined;
 
@@ -60,14 +60,23 @@ export class Renderer {
     const samplerArray = new Int32Array(8);
     for (let i = 0; i < 8; ++i) { samplerArray[i] = i; }
     this.gl.uniform1iv(this.imageUniformLocation, samplerArray);
-    
-    this.createShit();
+
+    this.uploadedTextures = [];
+
+    this.createBuffers();
     this.uploadTextures();
     this.buffers = this.updateBuffers();
 
   }
 
-  createShit() {
+  spriteForKey(key) {
+    for (let i = 0; i < this.world.sprites.length; ++i) {
+      if (this.world.sprites[i].key == key) return this.world.sprites[i];
+    }
+    return undefined;
+  }
+
+  createBuffers() {
     this.vertexBuffer = this.gl.createBuffer();
     this.colorBuffer = this.gl.createBuffer();
     this.textureBuffer = this.gl.createBuffer();
@@ -81,16 +90,20 @@ export class Renderer {
       sprite.positions.forEach(element => {
         positions.push(element);
       });
-      /*sprite.texCoord.forEach(element => {
-        textCoords.push(element);
-      });*/
+
+      let maxX = 1.0;
+      let maxY = 1.0;
+      if (sprite.wrapMode == 1) {
+        maxX = window.innerWidth / 1024;
+      }
+
       let coords = [
-        0.0, 0.0, sprite.textureUnit,
-        1.0, 0.0, sprite.textureUnit,
-        0.0, 1.0, sprite.textureUnit,
-        0.0, 1.0, sprite.textureUnit,
-        1.0, 0.0, sprite.textureUnit,
-        1.0, 1.0, sprite.textureUnit,
+        0.0 + sprite.repeatX, 0.0, sprite.textureUnit,
+        maxX + sprite.repeatX, 0.0, sprite.textureUnit,
+        0.0 + sprite.repeatX, maxY, sprite.textureUnit,
+        0.0 + sprite.repeatX, maxY, sprite.textureUnit,
+        maxX + sprite.repeatX, 0.0, sprite.textureUnit,
+        maxX + sprite.repeatX, maxY, sprite.textureUnit,
       ];
       coords.forEach(element => {
         textCoords.push(element);
@@ -127,40 +140,20 @@ export class Renderer {
     this.gl.vertexAttribPointer(attributeLocation, size, type, normalize, stride, offset);
   }
 
-  addBaseTexture(unit = 0) {
-    var texture = this.gl.createTexture();
-    // make unit 0 the active texture uint
-    this.gl.activeTexture(this.gl.TEXTURE0 + unit);
-
-    // Bind it to texture unit 0' 2D bind point
-    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-
-    // Set the parameters so we don't need mips and so we're not filtering
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
-
-    // Upload the image into the texture.
-    var mipLevel = 0;               // the largest mip
-    var internalFormat = this.gl.RGBA;   // format we want in the texture
-    var srcFormat = this.gl.RGBA;        // format of data we are supplying
-    var srcType = this.gl.UNSIGNED_BYTE  // type of data we are supplying
-    this.gl.texImage2D(this.gl.TEXTURE_2D,
-      mipLevel,
-      internalFormat,
-      srcFormat,
-      srcType,
-      this.image);
-
-    return texture;
-  }
-
   uploadTextures() {
     for (let i = 0; i < this.world.sprites.length; ++i) {
       const sprite = this.world.sprites[i];
-      this.uploadTexture(sprite);
-      console.log("uploaded, "+sprite.key);
+
+      if (this.uploadedTextures.indexOf(sprite.key) == -1) {
+        this.uploadTexture(sprite);
+        this.uploadedTextures.push(sprite.key);
+        console.log("uploaded, " + sprite.key);
+        console.log("total uploaded, "+this.uploadedTextures.length);
+      } else {
+        const uploadedSprite = this.spriteForKey(sprite.key);
+        sprite.textureUnit = uploadedSprite.textureUnit;
+        sprite.imageData = uploadedSprite.imageData;
+      }
     }
   }
 
@@ -169,16 +162,19 @@ export class Renderer {
     // make unit 0 the active texture uint
     sprite.textureUnit = this.bindUnit;
     this.gl.activeTexture(this.gl.TEXTURE0 + sprite.textureUnit);
-
     // Bind it to texture unit 0' 2D bind point
     this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
 
     // Set the parameters so we don't need mips and so we're not filtering
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, sprite.wrapMode == 0 ? this.gl.CLAMP_TO_EDGE : this.gl.REPEAT);
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, sprite.wrapMode == 0 ? this.gl.CLAMP_TO_EDGE : this.gl.REPEAT);
 
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.LINEAR);
+    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+    this.gl.pixelStorei(this.gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+
+    this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+    this.gl.enable(this.gl.BLEND);
     // Upload the image into the texture.
     var mipLevel = 0;               // the largest mip
     var internalFormat = this.gl.RGBA;   // format we want in the texture
@@ -190,25 +186,14 @@ export class Renderer {
       srcFormat,
       srcType,
       sprite.imageData);
+    this.gl.generateMipmap(this.gl.TEXTURE_2D);
 
     this.bindUnit++;
     return texture;
   }
 
-renderScene(/*objectManager, shaderType*/) {
-    /*const posSize = 2; //coordinates
-    const colSize = 4; //color coordinate RGBA
-    const texSize = 2;
-    this.arrayToBuffer(objectManager.positions, this.positionAttributeLocation, this.gl.FLOAT, false, posSize);
-
-    if (shaderType == "color")
-      this.arrayToBuffer(objectManager.colors, this.colorAttributeLocation, this.gl.UNSIGNED_BYTE, true, colSize);
-
-    if (shaderType == "texture"){
-      this.arrayToBuffer(objectManager.texCoord, this.texCoordAttributeLocation, this.gl.FLOAT, false, texSize);
-    }
-    */
-   this.updateBuffers();
+  render() {
+    this.updateBuffers();
     const primitiveType = this.gl.TRIANGLES;
     const offset = 0;
     const posSize = 2;
@@ -217,13 +202,6 @@ renderScene(/*objectManager, shaderType*/) {
     this.gl.drawArrays(primitiveType, offset, count);
   }
 
-  render() {
-    this.renderScene();
-  }
-
-  update() {
-
-  }
 
   createProgram(gl, vertexShader, fragmentShader) {
     let program = gl.createProgram();
@@ -240,17 +218,4 @@ renderScene(/*objectManager, shaderType*/) {
     gl.deleteProgram(program);
     return undefined;
   }
-
-  /*loadImage(src, renderer, objectManager, shaderType) {
-    if (shaderType != "texture") {
-      alert("shaderType not 'texture'! Use 'color' as type if solid color is needed.");
-    }
-    this.objectManager = objectManager;
-    this.image = new Image();
-    this.image.src = src;
-    this.image.onload = function () {
-      renderer.renderScene(objectManager, shaderType);
-    };
-  }
-  */
 }

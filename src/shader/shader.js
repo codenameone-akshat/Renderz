@@ -57,6 +57,12 @@ export class Shader {
     void main(){
     if(v_texCoord.z >= 0.0) outColor = texture(u_image[0], v_texCoord.xy);
     if(v_texCoord.z >= 0.9) outColor = texture(u_image[1], v_texCoord.xy);
+    if(v_texCoord.z >= 1.9) outColor = texture(u_image[2], v_texCoord.xy);
+    if(v_texCoord.z >= 2.9) outColor = texture(u_image[3], v_texCoord.xy);
+    if(v_texCoord.z >= 3.9) outColor = texture(u_image[4], v_texCoord.xy);
+    if(v_texCoord.z >= 4.9) outColor = texture(u_image[5], v_texCoord.xy);
+    if(v_texCoord.z >= 5.9) outColor = texture(u_image[6], v_texCoord.xy);
+    if(v_texCoord.z >= 6.9) outColor = texture(u_image[7], v_texCoord.xy);
   }`;
 }
 
