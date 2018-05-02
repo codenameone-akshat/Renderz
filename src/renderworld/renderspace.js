@@ -1,12 +1,12 @@
-import { Shader } from "../shader/shader.js";
+import { Shader } from "../shader/shader.js"
 import { Renderz } from "../core/renderz.js"
-import { GeomertyManager } from "../core/geometrymanager.js"
+import { ObjectManager } from "../geometry/objectmanager.js"
 
 export class RenderSpace {
     constructor() {
         this.shader = new Shader();
         this.renderer = new Renderz();
-        this.geometryMgr = new GeomertyManager();
+        this.objMgr = new ObjectManager();
         this.shaderType = undefined;
         this.imageSrc = undefined;
     }
@@ -23,8 +23,19 @@ export class RenderSpace {
         this.imageSrc = src;
     }
 
-    getGeomertyManager() {
-        return this.geometryMgr;
+    getObjectManager() {
+        return this.objMgr;
+    }
+
+    updateBuffers() {
+        if (this.shaderType == "texture") {
+            this.objMgr.updateTextureArrays();
+            this.renderer.renderScene();
+        }
+        else {
+            this.renderer.renderScene();
+            this.objMgr.updateColorArrays();
+        }
     }
 
     renderWorld() {
@@ -35,11 +46,11 @@ export class RenderSpace {
                 alert("Image source not provided! Use setImageSource() to give a path for the image.");
 
             else {
-                this.renderer.loadImage(this.imageSrc, this.renderer, this.geometryMgr, this.shaderType);
+                this.renderer.loadImage(this.imageSrc, this.renderer, this.objMgr, this.shaderType);
             }
         }
         else if (this.shaderType == "color") {
-            this.renderer.renderScene(this.geometryMgr, this.shaderType);
+            this.renderer.renderScene(this.objMgr, this.shaderType);
         }
     }
 }

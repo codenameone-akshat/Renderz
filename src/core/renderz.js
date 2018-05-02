@@ -1,10 +1,10 @@
 export class Renderz {
   init(fillType, shader) {
-    if(fillType == undefined){
+    if (fillType == undefined) {
       alert("Shader Type not set. Set the shader as 'color' or 'texture' using setShaderType()");
       return;
     }
-    
+
     this.canvas = document.getElementById("canvas");
     this.gl = this.canvas.getContext("webgl2");
     this.canvas.height = window.innerHeight - (window.innerHeight * 0.05);
@@ -39,10 +39,10 @@ export class Renderz {
 
     // get uniform location
     this.resolutionUniformLocation = this.gl.getUniformLocation(this.program, "u_resolution");
-   
+
     // get image location if fragment shader of type texture
     if (this.fragmentShaderType == "texture")
-      this.imageUniformLocation = this.gl.getAttribLocation(this.program, "u_image");
+      this.imageUniformLocation = this.gl.getUniformLocation(this.program, "u_image");
 
     // create vertex array object and bind it to be the current one
     let vao = this.gl.createVertexArray();
@@ -69,17 +69,18 @@ export class Renderz {
     this.gl.vertexAttribPointer(attributeLocation, size, type, normalize, stride, offset);
   }
 
-  renderScene(geometryManager, shaderType) {
+  renderScene(objectManager, shaderType) {
     const posSize = 2; //coordinates
     const colSize = 4; //color coordinate RGBA
     const texSize = 2;
-    this.arrayToBuffer(geometryManager.positions, this.positionAttributeLocation, this.gl.FLOAT, false, posSize);
+    this.arrayToBuffer(objectManager.positions, this.positionAttributeLocation, this.gl.FLOAT, false, posSize);
 
     if (shaderType == "color")
-      this.arrayToBuffer(geometryManager.colors, this.colorAttributeLocation, this.gl.UNSIGNED_BYTE, true, colSize);
+      this.arrayToBuffer(objectManager.colors, this.colorAttributeLocation, this.gl.UNSIGNED_BYTE, true, colSize);
 
-    if (shaderType == "texture")
-      this.arrayToBuffer(this.texCoord, this.texCoordAttributeLocation, this.gl.FLOAT, false, texSize);
+    if (shaderType == "texture"){
+      this.arrayToBuffer(objectManager.texCoord, this.texCoordAttributeLocation, this.gl.FLOAT, false, texSize);
+    }
 
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
 
@@ -115,15 +116,15 @@ export class Renderz {
 
     // using the program
     this.gl.useProgram(this.program);
-    
+
     this.gl.uniform2f(this.resolutionUniformLocation, this.gl.canvas.width, this.gl.canvas.height);
 
     if (shaderType == "texture") {
-      gl.uniform1i(imageLocation, 0);
+      this.gl.uniform1i(this.imageUniformLocation, 0);
     }
-    
+
     //number of vertices in the position buffer
-    var count = geometryManager.positions.length / posSize;
+    var count = objectManager.positions.length / posSize;
     let offset = 0;
     // draw the triangles
     let primitiveType = this.gl.TRIANGLES;
@@ -147,13 +148,13 @@ export class Renderz {
   }
 
   loadImage(src, renderer, geometryMgr, shaderType) {
-    if(shaderType != "texture"){
+    if (shaderType != "texture") {
       alert("shaderType not 'texture'! Use 'color' as type if solid color is needed.");
     }
     this.image = new Image();
     this.image.src = src;
     this.image.onload = function () {
-        renderer.renderShapes(geometryMgr, shaderType);
+      renderer.renderScene(geometryMgr, shaderType);
     };
-}
+  }
 }

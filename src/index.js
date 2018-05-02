@@ -4,26 +4,18 @@ import { RenderSpace } from "./renderworld/renderspace.js"
 //function using the api
 function exec() {
     let world = new RenderSpace("texture");
-    let geometryMgr = world.getGeomertyManager();
-
-    geometryMgr.setTrisVertices(
-        80, 70,
-        150, 70,
-        150, 10,
-     );
-    geometryMgr.setColor(31, 211, 150, 255);
-        
-    geometryMgr.setQuadVertices(
-        10, 10,
-        10, 70,
-        70, 10,
-        70, 70,
-    );
-    geometryMgr.setColor(222, 100, 40, 255);
+    let manager = world.getObjectManager();
+    let sprite = manager.getNewSpriteContainer(0);
     
-    world.setFragmentShaderType("color");
+    sprite.setSpriteTransformData(0,0,300,300);
+    sprite.setTextureTransform();
 
-    //world.setImageSource("data/road.png");
+    manager.bindSpriteToGeometry(sprite);
+    manager.bindSpriteTextureData(sprite);
+    manager.translateSprite(sprite.id, 120,10);
+
+    world.setImageSource("../data/road.png");
+    world.setFragmentShaderType("texture");
     world.renderWorld();
 }
 
