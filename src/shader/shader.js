@@ -32,10 +32,10 @@ export class Shader {
     this.textureVertexShaderSrc = `#version 300 es
 
     in vec2 a_pos;
-    in vec2 a_texCoord;
-    out vec2 v_texCoord;
+    in vec3 a_texCoord;
+    out vec3 v_texCoord;
     uniform vec2 u_resolution;
-    
+
     void main(){
       
       vec2 zeroToOne = a_pos.xy / u_resolution;
@@ -49,15 +49,20 @@ export class Shader {
     this.textureFragmentShaderSrc = `#version 300 es
 
     precision mediump float;
+    uniform sampler2D u_image[8];
 
-    uniform sampler2D u_image;
-
-    in vec2 v_texCoord;  
+    in vec3 v_texCoord;  
     out vec4 outColor;
       
     void main(){
-
-    outColor = texture(u_image, v_texCoord);
+    if(v_texCoord.z >= 0.0) outColor = texture(u_image[0], v_texCoord.xy);
+    if(v_texCoord.z >= 0.9) outColor = texture(u_image[1], v_texCoord.xy);
+    if(v_texCoord.z >= 1.9) outColor = texture(u_image[2], v_texCoord.xy);
+    if(v_texCoord.z >= 2.9) outColor = texture(u_image[3], v_texCoord.xy);
+    if(v_texCoord.z >= 3.9) outColor = texture(u_image[4], v_texCoord.xy);
+    if(v_texCoord.z >= 4.9) outColor = texture(u_image[5], v_texCoord.xy);
+    if(v_texCoord.z >= 5.9) outColor = texture(u_image[6], v_texCoord.xy);
+    if(v_texCoord.z >= 6.9) outColor = texture(u_image[7], v_texCoord.xy);
   }`;
 }
 
