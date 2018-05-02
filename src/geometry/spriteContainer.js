@@ -1,9 +1,18 @@
 export class SpriteContainer {
-    constructor() {
+    constructor(key) {
         this.id = undefined;
         this.positions = [];
+        this.texCoord = [];
         this.width = undefined;
         this.height = undefined;
+
+        this.key = key;
+        this.imageData = undefined;
+        this.textureUnit = 0;
+    }
+
+    update(){
+        this.translateSpriteByOffset(1,0);
     }
 
     setSpriteTransformData(x, y, width, height) {
@@ -20,10 +29,10 @@ export class SpriteContainer {
         this.positions.push(x + width);
         this.positions.push(y + height);
     }
-getVertexCount(){
-    return this.positions.length;
-}
-    setTextureTransform() {
+    getVertexCount() {
+        return this.positions.length;
+    }
+    /*setTextureTransform() {
         this.texCoord = [
             0.0, 0.0,
             1.0, 0.0,
@@ -32,12 +41,12 @@ getVertexCount(){
             1.0, 0.0,
             1.0, 1.0
         ];
-    }
+    }*/
 
     translateSpriteByOffset(x, y) {
-        for(var i=0; i< this.positions.length;i = i + 2){
+        for (var i = 0; i < this.positions.length; i = i + 2) {
             this.positions[i] = this.positions[i] + x;
-            this.positions[i+1] = this.positions[i+1] + y;
+            this.positions[i + 1] = this.positions[i + 1] + y;
         }
     }
 }

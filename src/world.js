@@ -1,14 +1,21 @@
-import { Shader } from "../shader/shader.js"
-import { Renderz } from "../core/renderz.js"
-import { ObjectManager } from "../geometry/objectmanager.js"
+import { Shader } from "./shader/shader"
+import { Renderer } from "./core/renderer"
+//import { ObjectManager } from "../geometry/objectmanager.js"
 
-export class RenderSpace {
+export class World {
     constructor() {
-        this.shader = new Shader();
-        this.renderer = new Renderz();
-        this.objMgr = new ObjectManager();
-        this.shaderType = undefined;
+        //this.shader = new Shader();
+        //this.renderer = new Renderer();
+        //this.objMgr = new ObjectManager();
+        /*this.shaderType = undefined;
         this.imageSrc = undefined;
+        */
+        this.sprites = [];
+    }
+
+    addSprite(sprite){
+        this.sprites.push(sprite);
+
     }
 
     setBackgroundColor(color) {
@@ -27,18 +34,18 @@ export class RenderSpace {
         return this.objMgr;
     }
 
-    updateBuffers() {
-        if (this.shaderType == "texture") {
-            this.objMgr.updateTextureArrays();
-            this.renderer.renderScene();
-        }
-        else {
-            this.renderer.renderScene();
-            this.objMgr.updateColorArrays();
-        }
-    }
+    // updateBuffers() {
+    //     if (this.shaderType == "texture") {
+    //         this.objMgr.updateTextureArrays();
+    //         this.renderer.renderScene();
+    //     }
+    //     else {
+    //         this.renderer.renderScene();
+    //         this.objMgr.updateColorArrays();
+    //     }
+    // }
 
-    renderWorld() {
+    /*renderWorld() {
         this.renderer.init(this.shaderType, this.shader);
 
         if (this.shaderType == "texture") {
@@ -52,5 +59,7 @@ export class RenderSpace {
         else if (this.shaderType == "color") {
             this.renderer.renderScene(this.objMgr, this.shaderType);
         }
+        window.requestAnimationFrame(this.step.bind(this));
     }
+    */
 }

@@ -1,3 +1,4 @@
+/*
 import { SpriteContainer } from "../geometry/spriteContainer.js"
 
 export class ObjectManager {
@@ -48,7 +49,7 @@ export class ObjectManager {
         return undefined;
     }
 
-    getNewSpriteContainer() {
+    getNewSpriteContainer(key) {
         var spriteContainer = new SpriteContainer();
         
         if (this.sprites.length == 0)
@@ -60,34 +61,36 @@ export class ObjectManager {
 
         return spriteContainer;
     }
-
-    bindSpriteToGeometry(spriteContainer) {
+*/
+    /*bindSpriteToGeometry(spriteContainer) {
         spriteContainer.positions.forEach(element => {
             this.positions.push(element);
         });
     }
+    */
 
-    updateSpriteTransformData(id) {
+    /*updateSpriteTransformData(id) {
         let sprite = this.getSpriteById(id);
         let i = 0;
         for (i = id * 12; i < sprite.positions.length; ++i) {
             this.positions[i] = sprite.positions[i];
         }
     }
+    */
 
-    bindSpriteTextureData(spriteContainer) {
+    /*bindSpriteTextureData(spriteContainer) {
         spriteContainer.texCoord.forEach(element => {
             this.texCoord.push(element);
         });
-    }
+    }*/
 
-    translateSprite(id, x, y) {
+    /*translateSprite(id, x, y) {
         let sprite = this.getSpriteById(id);
 
         sprite.translateSpriteByOffset(x, y);
         this.updateSpriteTransformData(id);
     }
-    
+    * /
     // updateTextureArrays(){
 
     // }
@@ -108,3 +111,4 @@ export class ObjectManager {
         }
     }
 }
+*/
