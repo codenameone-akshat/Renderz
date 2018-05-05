@@ -45,13 +45,12 @@ export class Engine {
         this.update();
         window.requestAnimationFrame(this.step.bind(this));
     }
-
 }
 
 export var engine = new Engine();
 
 
-/*
+/*  DEPRICATED CODE
     let response = await fetch("https://i.imgur.com/mw5Uh2F.jpg");
     //let response = await fetch("./data/road.png");
     let blob = await response.blob();

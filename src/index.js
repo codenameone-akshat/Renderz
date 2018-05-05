@@ -6,14 +6,7 @@ import { Rock } from "./scene/rock";
 import { Mountain } from "./scene/mountain";
 
 //function using the api
-function test() {
-
-    /*let meme = new Sprite(
-        'https://i.imgur.com/mw5Uh2F.jpg',
-        0, 0, 300, 300
-    );
-    engine.world.addSprite(meme);
-    */
+function scene() {
 
     let sun = new Sun(
         './data/Ring.png',
@@ -25,6 +18,7 @@ function test() {
         './data/mountains-back.png',
         0, window.innerHeight - 640, window.innerWidth, 512
     );
+
     mountain.wrapMode = 1;
     mountain.xOffset = 3 / 10000;
     engine.world.addSprite(mountain);
@@ -45,7 +39,7 @@ function test() {
     mountainMid2.xOffset = 15 / 10000;
     engine.world.addSprite(mountainMid2);
 
-   let rockDimension = 300;
+    let rockDimension = 300;
     let rock0 = new Rock(
         './data/rock.png',
         -window.innerWidth * 0.01, window.innerHeight - rockDimension * 0.7,
@@ -61,4 +55,4 @@ function test() {
     engine.start();
 }
 
-test();
+scene();

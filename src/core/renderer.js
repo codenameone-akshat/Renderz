@@ -2,7 +2,7 @@ export class Renderer {
 
   constructor() {
     this.world = undefined;
-    this.bindUnit = 0;
+    this.textureBindUnit = 0;
   }
 
   init(fillType, shader) {
@@ -66,7 +66,6 @@ export class Renderer {
     this.createBuffers();
     this.uploadTextures();
     this.buffers = this.updateBuffers();
-
   }
 
   spriteForKey(key) {
@@ -94,7 +93,7 @@ export class Renderer {
       let maxX = 1.0;
       let maxY = 1.0;
       if (sprite.wrapMode == 1) {
-        maxX = window.innerWidth / 1024;
+        maxX = window.innerWidth / sprite.imageData.width;
       }
 
       let coords = [
@@ -117,7 +116,6 @@ export class Renderer {
 
     return { positions: positions, textCoords: textCoords };
   }
-
 
   arrayToBuffer(array, buffer, attributeLocation, dataType, shouldNormalize, size) {
 
@@ -148,7 +146,7 @@ export class Renderer {
         this.uploadTexture(sprite);
         this.uploadedTextures.push(sprite.key);
         console.log("uploaded, " + sprite.key);
-        console.log("total uploaded, "+this.uploadedTextures.length);
+        console.log("total uploaded, " + this.uploadedTextures.length);
       } else {
         const uploadedSprite = this.spriteForKey(sprite.key);
         sprite.textureUnit = uploadedSprite.textureUnit;
@@ -160,7 +158,7 @@ export class Renderer {
   uploadTexture(sprite) {
     var texture = this.gl.createTexture();
     // make unit 0 the active texture uint
-    sprite.textureUnit = this.bindUnit;
+    sprite.textureUnit = this.textureBindUnit;
     this.gl.activeTexture(this.gl.TEXTURE0 + sprite.textureUnit);
     // Bind it to texture unit 0' 2D bind point
     this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
@@ -188,7 +186,7 @@ export class Renderer {
       sprite.imageData);
     this.gl.generateMipmap(this.gl.TEXTURE_2D);
 
-    this.bindUnit++;
+    this.textureBindUnit++;
     return texture;
   }
 
