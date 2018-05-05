@@ -11,7 +11,4 @@ export class World {
     setBackgroundColor(color) {
         document.body.style.backgroundColor = color;
     }
-    setFragmentShaderType(type) {
-        this.shaderType = type;
-    }
 }

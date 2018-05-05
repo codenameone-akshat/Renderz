@@ -4,6 +4,7 @@ import { Sprite } from "./core/sprite";
 import { Sun } from "./scene/sun";
 import { Rock } from "./scene/rock";
 import { Mountain } from "./scene/mountain";
+import { Ship } from "./scene/ship";
 
 //function using the api
 function scene() {
@@ -18,10 +19,16 @@ function scene() {
         './data/mountains-back.png',
         0, window.innerHeight - 640, window.innerWidth, 512
     );
-
     mountain.wrapMode = 1;
     mountain.xOffset = 3 / 10000;
     engine.world.addSprite(mountain);
+
+    let ship = new Ship(
+        './data/ship.png',
+        0,350,512*1.5,256*1.5 
+    );
+    ship.wrapMode = 0;
+    engine.world.addSprite(ship);
 
     let mountainMid = new Mountain(
         './data/mountains-mid1.png',
@@ -51,7 +58,6 @@ function scene() {
         window.innerWidth * 0.09, window.innerHeight - rockDimension * 0.5,
         rockDimension, rockDimension);
     engine.world.addSprite(rock1);
-
     engine.start();
 }
 

@@ -6,7 +6,6 @@ export class Sprite {
         this.id = undefined;
         this.positions = [];
         this.texCoord = [];
-
         this.x = x;
         this.y = y;
         this.width = width;

@@ -13,8 +13,8 @@ export class Renderer {
 
     this.canvas = document.getElementById("canvas");
     this.gl = this.canvas.getContext("webgl2");
-    this.canvas.height = window.innerHeight;// - (window.innerHeight * 0.05);
-    this.canvas.width = window.innerWidth;// - (window.innerWidth * 0.05);
+    this.canvas.height = window.innerHeight;
+    this.canvas.width = window.innerWidth;
     this.fragmentShaderType = fillType;
     this.image = undefined;
 
@@ -36,24 +36,22 @@ export class Renderer {
 
     // get attribute location
     this.positionAttributeLocation = this.gl.getAttribLocation(this.program, "a_pos");
-
+    //color shader
     if (this.fragmentShaderType == "color")
       this.colorAttributeLocation = this.gl.getAttribLocation(this.program, "a_color");
-
+    //texture shader
     else if (this.fragmentShaderType == "texture")
       this.texCoordAttributeLocation = this.gl.getAttribLocation(this.program, "a_texCoord");
 
     // get uniform location
     this.resolutionUniformLocation = this.gl.getUniformLocation(this.program, "u_resolution");
 
-    // get image location if fragment shader of type texture
-    //if (this.fragmentShaderType == "texture")
-    // create vertex array object and bind it to be the current one
     let vao = this.gl.createVertexArray();
     this.gl.bindVertexArray(vao);
 
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-    // using the program
+    
+    //using the program
     this.gl.useProgram(this.program);
     this.gl.uniform2f(this.resolutionUniformLocation, this.gl.canvas.width, this.gl.canvas.height);
     this.imageUniformLocation = this.gl.getUniformLocation(this.program, "u_image");
@@ -122,12 +120,8 @@ export class Renderer {
     // bind buffer for vertex positions
     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
     //for different types of arrays
-    //if (dataType == this.gl.FLOAT)
     const float32Array = new Float32Array(array);
     this.gl.bufferData(this.gl.ARRAY_BUFFER, float32Array, this.gl.DYNAMIC_DRAW);
-    //else if (dataType == this.gl.UNSIGNED_BYTE)
-    //  this.gl.bufferData(this.gl.ARRAY_BUFFER, new Uint8Array(array), this.gl.DYNAMIC_DRAW);
-
     // generic vertex array to list of attribute arrays
     this.gl.enableVertexAttribArray(attributeLocation);
     //number of positional given
@@ -199,7 +193,6 @@ export class Renderer {
     // draw the triangles
     this.gl.drawArrays(primitiveType, offset, count);
   }
-
 
   createProgram(gl, vertexShader, fragmentShader) {
     let program = gl.createProgram();

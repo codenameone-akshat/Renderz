@@ -86,7 +86,7 @@ export class Shader {
       return undefined;
     }
 
-    createShader(gl, type, src) {
+    compileShader(gl, type, src) {
       let shader = gl.createShader(type);
       gl.shaderSource(shader, src);
       gl.compileShader(shader);
