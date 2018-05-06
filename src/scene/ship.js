@@ -13,5 +13,8 @@ export class Ship extends Sprite {
         }
         this.translate(0.3, 0.5 * this.direction);
         this.yTrans = this.yTrans + (0.05 * this.direction);
+
+        if(this.x > window.innerWidth)
+            this.translate(-window.innerWidth-this.width, 0);
     }
 }

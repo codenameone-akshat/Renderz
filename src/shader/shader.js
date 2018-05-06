@@ -64,40 +64,28 @@ export class Shader {
     if(v_texCoord.z >= 5.9) outColor = texture(u_image[6], v_texCoord.xy);
     if(v_texCoord.z >= 6.9) outColor = texture(u_image[7], v_texCoord.xy);
   }`;
-}
-
-    getVertexShader(type) {
-      if (type == "color")
-        return this.vertexShaderSrc;
-
-      else if (type == "texture")
-        return this.textureVertexShaderSrc;
-
-      return undefined;
-    }
-
-    getFragmentShader(type) {
-      if (type == "color")
-        return this.fragmentShaderSrc;
-
-      else if (type == "texture")
-        return this.textureFragmentShaderSrc;
-
-      return undefined;
-    }
-
-    compileShader(gl, type, src) {
-      let shader = gl.createShader(type);
-      gl.shaderSource(shader, src);
-      gl.compileShader(shader);
-
-      let status = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
-      if (status) {
-        return shader; // if success return
-      }
-      // else show the error and delete shader
-      console.log(gl.getShaderInfoLog(shader));// eslint-disable-line
-      gl.deleteShader(shader);
-      return undefined;
-    }
   }
+
+  getVertexShader(type) {
+    return this.textureVertexShaderSrc;
+  }
+
+  getFragmentShader(type) {
+    return this.textureFragmentShaderSrc;
+  }
+
+  compileShader(gl, type, src) {
+    let shader = gl.createShader(type);
+    gl.shaderSource(shader, src);
+    gl.compileShader(shader);
+
+    let status = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+    if (status) {
+      return shader; // if success return
+    }
+    // else show the error and delete shader
+    console.log(gl.getShaderInfoLog(shader));// eslint-disable-line
+    gl.deleteShader(shader);
+    return undefined;
+  }
+}

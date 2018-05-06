@@ -28,8 +28,8 @@ export class Renderer {
     let fragmentShaderSrc = shader.getFragmentShader(this.fragmentShaderType);
 
     // create shaders
-    let vertexShader = shader.createShader(this.gl, this.gl.VERTEX_SHADER, vertexShaderSrc);
-    let fragmentShader = shader.createShader(this.gl, this.gl.FRAGMENT_SHADER, fragmentShaderSrc);
+    let vertexShader = shader.compileShader(this.gl, this.gl.VERTEX_SHADER, vertexShaderSrc);
+    let fragmentShader = shader.compileShader(this.gl, this.gl.FRAGMENT_SHADER, fragmentShaderSrc);
 
     // create program and link shaders to the program
     this.program = this.createProgram(this.gl, vertexShader, fragmentShader);
